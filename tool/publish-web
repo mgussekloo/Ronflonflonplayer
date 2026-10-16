@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+cd "$ROOT"
+
+# Build locally; Forge only serves the committed static release.
+./tool/flutter pub get
+./tool/flutter build web --release --no-web-resources-cdn --pwa-strategy=none
+mkdir -p public
+rsync -a --delete --exclude='.last_build_id' build/web/ public/
+sh tool/verify-release.sh
+printf '%s\n' 'Release ready. Commit public/ together with your source changes before pushing.'

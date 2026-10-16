@@ -1,0 +1,28 @@
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+coverage/
+.tools/
+*.iml
+.DS_Store
+
+# Local credentials and editor settings
+.env
+.env.*
+!.env.example
+.idea/
+.vscode/
+
+# Local Herd / Nginx runtime files
+client_body_temp/
+fastcgi_temp/
+proxy_temp/
+scgi_temp/
+uwsgi_temp/
+nginx.pid
+*.log
+
+# Local poster reference (not an application asset)
+/IMG_2273.JPG

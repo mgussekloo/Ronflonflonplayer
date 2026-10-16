@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+SDK="$ROOT/.tools/flutter-3.35.4/bin/flutter"
+if [ -x "$SDK" ]; then
+  export PUB_CACHE="$ROOT/.tools/pub-cache"
+  export HOME="$ROOT/.tools/home"
+  export FLUTTER_SUPPRESS_ANALYTICS=true
+  exec "$SDK" "$@"
+fi
+if command -v flutter >/dev/null 2>&1; then
+  exec flutter "$@"
+fi
+printf '%s\n' 'Flutter is not installed. Install Flutter 3.35 or newer and add flutter/bin to PATH.' >&2
+exit 1
