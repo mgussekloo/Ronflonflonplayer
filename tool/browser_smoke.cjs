@@ -33,14 +33,14 @@ const server = http.createServer((req, res) => {
     await page.goto('http://127.0.0.1:7357');
     await page.locator('flt-semantics-placeholder').waitFor({ state: 'attached', timeout: 45000 });
     await page.locator('flt-semantics-placeholder').dispatchEvent('click');
-    await page.getByRole('button', { name: 'Start listening' }).waitFor({ timeout: 45000 });
+    await page.getByRole('button', { name: 'Begin met luisteren' }).waitFor({ timeout: 45000 });
     await page.waitForFunction(async () => {
       const cache = await caches.open('ronflonflon-audio-v1');
       return (await cache.keys()).length === 0;
     });
     console.log('Initial list loaded without downloading audio.');
-    await page.getByRole('button', { name: 'Start listening' }).click();
-    await page.getByRole('button', { name: 'Pause', exact: true }).waitFor({ timeout: 120000 });
+    await page.getByRole('button', { name: 'Begin met luisteren' }).click();
+    await page.getByRole('button', { name: 'Pauzeren', exact: true }).waitFor({ timeout: 120000 });
     await page.waitForFunction(() => {
       const raw = JSON.parse(localStorage.getItem('flutter.ronflonflon.progress.v1'));
       const progress = typeof raw === 'string' ? JSON.parse(raw) : raw;
@@ -50,7 +50,7 @@ const server = http.createServer((req, res) => {
       console.log('Progress storage:', await page.evaluate(() => localStorage.getItem('flutter.ronflonflon.progress.v1')));
       throw error;
     });
-    await page.getByRole('button', { name: 'Pause', exact: true }).click();
+    await page.getByRole('button', { name: 'Pauzeren', exact: true }).click();
     const read = () => page.evaluate(() => {
           const stored = JSON.parse(localStorage.getItem('flutter.ronflonflon.progress.v1'));
           return typeof stored === 'string' ? JSON.parse(stored) : stored;
@@ -63,10 +63,10 @@ const server = http.createServer((req, res) => {
     await page.reload();
     await page.locator('flt-semantics-placeholder').waitFor({ state: 'attached', timeout: 45000 });
     await page.locator('flt-semantics-placeholder').dispatchEvent('click');
-    await page.getByRole('button', { name: 'Resume', exact: true }).waitFor({ timeout: 45000 });
+    await page.getByRole('button', { name: 'Verder luisteren', exact: true }).waitFor({ timeout: 45000 });
     assert.equal((await read()).positions[saved.currentId], saved.positions[saved.currentId]);
-    await page.getByRole('button', { name: 'Resume', exact: true }).click();
-    await page.getByRole('button', { name: 'Pause', exact: true }).waitFor({ timeout: 15000 });
+    await page.getByRole('button', { name: 'Verder luisteren', exact: true }).click();
+    await page.getByRole('button', { name: 'Pauzeren', exact: true }).waitFor({ timeout: 15000 });
     // Advance the real media element to the end instead of waiting 54 minutes.
     await page.evaluate(() => { window.testAudio.currentTime = window.testAudio.duration - 0.2; });
     await page.waitForFunction(async () => (await (await caches.open('ronflonflon-audio-v1')).keys()).length === 0);

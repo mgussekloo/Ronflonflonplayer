@@ -12,7 +12,7 @@
     async prepare(url, onProgress) {
       release();
       if (!window.isSecureContext || !window.caches) {
-        throw new Error('Audio storage requires HTTPS or localhost.');
+        throw new Error('Audio opslaan vereist HTTPS of localhost.');
       }
       const cache = await caches.open(cacheName);
       let response = await cache.match(url);
@@ -28,7 +28,7 @@
           // Avoid an additional, uncontrollable copy in the browser HTTP cache.
           const download = await fetch(url, { cache: 'no-store', signal: abort.signal });
           if (!download.ok || download.type === 'opaque') {
-            throw new Error(`Archive.org download failed (${download.status}).`);
+            throw new Error(`Downloaden van Archive.org is mislukt (${download.status}).`);
           }
           const total = Number(download.headers.get('content-length'));
           const chunks = [];
@@ -43,7 +43,7 @@
             resetTimeout();
             onProgress(total > 0 ? Math.min(received / total, 1) : -1);
           }
-          if (received === 0) throw new Error('Archive.org returned an empty audio file.');
+          if (received === 0) throw new Error('Archive.org heeft een leeg audiobestand teruggestuurd.');
           const blob = new Blob(chunks, { type: 'audio/mpeg' });
           response = new Response(blob, { headers: { 'Content-Type': 'audio/mpeg' } });
           // Quota failures are visible: never pretend an episode is saved offline.

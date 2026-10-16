@@ -13,20 +13,20 @@ String formatTime(Duration value) {
 
 String episodeDate(Episode episode) {
   final date = episode.date;
-  if (date == null) return 'Date unavailable';
+  if (date == null) return 'Datum onbekend';
   const months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
+    'jan',
+    'feb',
+    'mrt',
+    'apr',
+    'mei',
+    'jun',
+    'jul',
+    'aug',
+    'sep',
+    'okt',
+    'nov',
+    'dec',
   ];
   return '${date.day} ${months[date.month - 1]} ${date.year}';
 }
@@ -76,7 +76,7 @@ class _PlayerScreenState extends State<PlayerScreen>
       if (mounted) {
         setState(() {
           _error =
-              'Could not reach Archive.org. Check your connection and try again.';
+              'Geen verbinding met Archive.org. Controleer je internetverbinding en probeer het opnieuw.';
         });
       }
     } finally {
@@ -134,7 +134,7 @@ class _PlayerScreenState extends State<PlayerScreen>
                           if (_offline)
                             const _Notice(
                               text:
-                                  'Using the saved episode list. Previously downloaded episodes can still play.',
+                                  'Je ziet de opgeslagen lijst met uitzendingen. Eerder gedownloade uitzendingen kun je nog beluisteren.',
                             ),
                           if (player.warning != null)
                             _Notice(text: player.warning!, warning: true),
@@ -142,7 +142,7 @@ class _PlayerScreenState extends State<PlayerScreen>
                             _Notice(text: player.message!, warning: true),
                           const SizedBox(height: 28),
                           Text(
-                            'The episodes',
+                            'De uitzendingen',
                             style: Theme.of(context).textTheme.headlineSmall
                                 ?.copyWith(
                                   fontWeight: FontWeight.w900,
@@ -151,13 +151,13 @@ class _PlayerScreenState extends State<PlayerScreen>
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            '${player.episodes.length} available · ${player.episodes.where((e) => player.state.completed.contains(e.id)).length} finished',
+                            '${player.episodes.length} beschikbaar · ${player.episodes.where((e) => player.state.completed.contains(e.id)).length} beluisterd',
                           ),
                           const SizedBox(height: 16),
                           TextField(
                             decoration: const InputDecoration(
                               prefixIcon: Icon(Icons.search),
-                              labelText: 'Find an episode or date',
+                              labelText: 'Zoek een uitzending of datum',
                               isDense: true,
                             ),
                             onChanged: (value) => setState(() {
@@ -166,7 +166,9 @@ class _PlayerScreenState extends State<PlayerScreen>
                           ),
                           const SizedBox(height: 10),
                           FilterChip(
-                            label: const Text('Hide finished'),
+                            label: const Text(
+                              'Verberg beluisterde uitzendingen',
+                            ),
                             selected: _hideFinished,
                             onSelected: (value) => setState(() {
                               _hideFinished = value;
@@ -186,7 +188,7 @@ class _PlayerScreenState extends State<PlayerScreen>
                                   const SizedBox(height: 12),
                                   OutlinedButton(
                                     onPressed: _load,
-                                    child: const Text('Try again'),
+                                    child: const Text('Opnieuw proberen'),
                                   ),
                                 ],
                               ),
@@ -194,7 +196,7 @@ class _PlayerScreenState extends State<PlayerScreen>
                           if (!_loading && _error == null && episodes.isEmpty)
                             const Padding(
                               padding: EdgeInsets.all(24),
-                              child: Text('No episodes match this view.'),
+                              child: Text('Geen uitzendingen gevonden.'),
                             ),
                         ],
                       ),
@@ -253,9 +255,9 @@ class _PlayerScreenState extends State<PlayerScreen>
                             ),
                             subtitle: Text(
                               '${episodeDate(episode)} · ${formatTime(episode.duration)}${finished
-                                  ? ' · Finished'
+                                  ? ' · Beluisterd'
                                   : position > Duration.zero
-                                  ? ' · ${formatTime(position)} played'
+                                  ? ' · ${formatTime(position)} beluisterd'
                                   : ''}',
                             ),
                             onTap: player.busy
@@ -263,7 +265,7 @@ class _PlayerScreenState extends State<PlayerScreen>
                                 : () => player.playEpisode(episode),
                             trailing: finished
                                 ? IconButton(
-                                    tooltip: 'Mark unfinished',
+                                    tooltip: 'Markeer als niet beluisterd',
                                     icon: const Icon(Icons.undo),
                                     onPressed: player.busy
                                         ? null
@@ -279,7 +281,7 @@ class _PlayerScreenState extends State<PlayerScreen>
                     child: Padding(
                       padding: EdgeInsets.all(24),
                       child: Text(
-                        'Audio from Internet Archive · Progress saved on this device only.\nEpisodes download when selected and are removed from app storage when finished.',
+                        'Audio van Internet Archive · Je luisterpositie wordt alleen op dit apparaat bewaard.\nUitzendingen worden gedownload zodra je ze kiest. Na het beluisteren worden ze uit de appopslag verwijderd.',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 12),
                       ),
@@ -297,26 +299,27 @@ class _PlayerScreenState extends State<PlayerScreen>
   void _showAbout(BuildContext context) => showDialog<void>(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text('A little radio time machine'),
+      title: const Text('Over deze speler'),
       content: const SingleChildScrollView(
         child: Text(
-          'This independent player uses the Ronflonflon collection on Archive.org. '
-          'Episode numbers come from filenames; exact duplicate uploads are hidden. '
-          'Missing numbers and incorrect or unavailable dates in the source are not filled in.\n\n'
-          'An episode downloads fully before it plays. Unfinished downloads are kept for resuming; '
-          'finished audio is removed from the app cache, not from the episode list. '
-          'Selecting a finished episode downloads it again.\n\n'
-          'Your current episode, position, and finished markers stay in this browser/device. '
-          'Clearing site data removes them. Browsers can also evict audio when storage is low. '
-          'There is no account or cross-device sync. Audio and metadata requests go to Archive.org.\n\n'
-          'Offline audio requires HTTPS or localhost. Offline app startup is not included. '
-          'Keep this page open while downloading or listening.',
+          'Deze onafhankelijke speler gebruikt de Ronflonflon-collectie op Archive.org. '
+          'De uitzendingsnummers komen uit de bestandsnamen; identieke uploads worden verborgen. '
+          'Ontbrekende nummers en onjuiste of ontbrekende datums in de bron worden niet aangevuld of gecorrigeerd.\n\n'
+          'Een uitzending wordt volledig gedownload voordat deze wordt afgespeeld. '
+          'Uitzendingen die je nog niet hebt uitgeluisterd, blijven bewaard zodat je verder kunt luisteren. '
+          'Na het beluisteren wordt de audio uit de appopslag verwijderd, maar de uitzending blijft in de lijst staan. '
+          'Als je een beluisterde uitzending kiest, wordt deze opnieuw gedownload.\n\n'
+          'Je huidige uitzending, luisterpositie en beluisterde uitzendingen worden alleen in deze browser op dit apparaat bewaard. '
+          'Als je de websitegegevens wist, verdwijnen ze. Je browser kan ook audio verwijderen als de opslagruimte bijna vol is. '
+          'Er is geen account en er wordt niets gesynchroniseerd tussen apparaten. Audio en uitzendingsgegevens worden opgehaald bij Archive.org.\n\n'
+          'Offline luisteren vereist HTTPS of localhost. Je kunt de app niet zonder internetverbinding openen. '
+          'Houd deze pagina open tijdens het downloaden of luisteren.',
         ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Got it'),
+          child: const Text('Begrepen'),
         ),
       ],
     ),
@@ -362,12 +365,12 @@ class _PlayerCardState extends State<_PlayerCard> {
           children: [
             Text(
               player.busy
-                  ? 'GETTING READY'
+                  ? 'EVEN GEDULD'
                   : player.playing
-                  ? 'NOW PLAYING'
+                  ? 'JE LUISTERT NAAR'
                   : finished
-                  ? 'EPISODE FINISHED'
-                  : 'YOUR LISTENING ROOM',
+                  ? 'UITZENDING BELUISTERD'
+                  : 'JOUW LUISTERKAMER',
               style: TextStyle(
                 fontSize: 12,
                 letterSpacing: 2,
@@ -377,7 +380,7 @@ class _PlayerCardState extends State<_PlayerCard> {
             ),
             const SizedBox(height: 12),
             Text(
-              episode?.label ?? 'Welcome to Ronflonflon',
+              episode?.label ?? 'Welkom bij Ronflonflon',
               style: Theme.of(
                 context,
               ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
@@ -385,7 +388,7 @@ class _PlayerCardState extends State<_PlayerCard> {
             const SizedBox(height: 4),
             Text(
               episode == null
-                  ? 'Start at the beginning. We’ll remember your place.'
+                  ? 'Begin bij het begin. We onthouden waar je bent gebleven.'
                   : episodeDate(episode),
             ),
             if (player.busy) ...[
@@ -394,14 +397,14 @@ class _PlayerCardState extends State<_PlayerCard> {
               const SizedBox(height: 10),
               Text(
                 player.downloadProgress == null
-                    ? 'Opening or downloading audio…'
+                    ? 'Audio openen of downloaden…'
                     : player.downloadProgress! >= 1
-                    ? 'Opening downloaded audio…'
-                    : 'Downloading audio · ${(player.downloadProgress! * 100).round()}%',
+                    ? 'Gedownloade audio openen…'
+                    : 'Audio downloaden · ${(player.downloadProgress! * 100).round()}%',
               ),
               const SizedBox(height: 6),
               const Text(
-                'Only this episode is downloaded. Large recordings may take a moment.',
+                'Alleen deze uitzending wordt gedownload. Bij grote opnamen kan dit even duren.',
                 style: TextStyle(fontSize: 12),
               ),
             ],
@@ -439,7 +442,7 @@ class _PlayerCardState extends State<_PlayerCard> {
               children: [
                 if (episode != null && !finished)
                   IconButton.outlined(
-                    tooltip: 'Back 15 seconds',
+                    tooltip: '15 seconden terug',
                     onPressed: !player.canSeek
                         ? null
                         : () => player.seek(
@@ -460,19 +463,19 @@ class _PlayerCardState extends State<_PlayerCard> {
                   icon: Icon(player.playing ? Icons.pause : Icons.play_arrow),
                   label: Text(
                     player.playing
-                        ? 'Pause'
+                        ? 'Pauzeren'
                         : finished && resume != null
-                        ? 'Continue · ${resume.label}'
+                        ? 'Verder luisteren · ${resume.label}'
                         : episode == null
-                        ? 'Start listening'
+                        ? 'Begin met luisteren'
                         : finished
-                        ? 'Play again'
-                        : 'Resume',
+                        ? 'Opnieuw afspelen'
+                        : 'Verder luisteren',
                   ),
                 ),
                 if (episode != null && !finished)
                   IconButton.outlined(
-                    tooltip: 'Forward 30 seconds',
+                    tooltip: '30 seconden vooruit',
                     onPressed: !player.canSeek
                         ? null
                         : () => player.seek(
@@ -484,7 +487,7 @@ class _PlayerCardState extends State<_PlayerCard> {
                   TextButton.icon(
                     onPressed: player.busy ? null : player.markFinished,
                     icon: const Icon(Icons.done),
-                    label: const Text('Mark finished'),
+                    label: const Text('Markeer als beluisterd'),
                   ),
                 if (player.buffering && !player.busy)
                   const SizedBox(

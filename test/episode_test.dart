@@ -49,10 +49,10 @@ void main() {
       ],
     });
     expect(episodes.map((e) => e.label), [
-      'Episode 258',
-      'Episode 260',
-      'Episode 260b',
-      'Episode 261',
+      'Uitzending 258',
+      'Uitzending 260',
+      'Uitzending 260b',
+      'Uitzending 261',
     ]);
     expect(episodes[2].date, DateTime(1989, 9, 27));
   });

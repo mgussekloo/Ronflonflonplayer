@@ -81,6 +81,6 @@ test('quota failures are visible and do not claim offline availability', async (
 test('insecure origins fail with actionable guidance', async () => {
   const state = setup();
   state.context.window.isSecureContext = false;
-  await assert.rejects(state.api.prepare('first', () => {}), /HTTPS or localhost/);
+  await assert.rejects(state.api.prepare('first', () => {}), /HTTPS of localhost/);
   assert.equal(state.downloads(), 0);
 });

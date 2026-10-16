@@ -19,7 +19,7 @@ class Episode {
 
   // File names, unlike the archive's track tags, are stable episode identities.
   String get id => fileName;
-  String get label => 'Episode ${number.toString().padLeft(3, '0')}$suffix';
+  String get label => 'Uitzending ${number.toString().padLeft(3, '0')}$suffix';
   Uri get audioUri =>
       Uri.https('archive.org', '/download/$archiveIdentifier/$fileName');
 

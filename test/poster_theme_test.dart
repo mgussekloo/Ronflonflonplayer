@@ -22,8 +22,16 @@ void main() {
         ),
       );
       expect(tester.takeException(), isNull);
-      expect(find.text('avec Jacques Plafond'), findsOneWidget);
-      await tester.tap(find.byTooltip('About this player'));
+      expect(find.text('met Jacques Plafond'), findsOneWidget);
+      expect(
+        find.text('De radio, de radio, wat is er op de radio?'),
+        findsOneWidget,
+      );
+      expect(
+        find.text('Alle uitzendingen van gisteren! Maar dan vandaag.'),
+        findsOneWidget,
+      );
+      await tester.tap(find.byTooltip('Over deze speler'));
       expect(opened, isTrue);
     });
   }

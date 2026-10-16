@@ -25,7 +25,9 @@ class PreferencesProgressStore implements ProgressStore {
   @override
   Future<void> write(ListeningState state) async {
     if (!await preferences.setString(key, jsonEncode(state.toJson()))) {
-      throw StateError('The browser or device could not save your progress.');
+      throw StateError(
+        'Je browser of apparaat kan je luisterpositie niet opslaan.',
+      );
     }
   }
 }
@@ -49,12 +51,14 @@ class LibraryRepository {
           .get(Uri.https('archive.org', '/metadata/$archiveIdentifier'))
           .timeout(const Duration(seconds: 25));
       if (response.statusCode != 200) {
-        throw StateError('Archive.org returned ${response.statusCode}.');
+        throw StateError(
+          'Archive.org gaf foutcode ${response.statusCode} terug.',
+        );
       }
       final metadata = jsonDecode(response.body) as Map<String, dynamic>;
       final episodes = Episode.fromMetadata(metadata);
       if (episodes.isEmpty) {
-        throw StateError('No episodes were found in the archive.');
+        throw StateError('Er zijn geen uitzendingen gevonden in het archief.');
       }
       // Keep just the audio metadata, not the archive's artwork/derivative records.
       final compact = jsonEncode({

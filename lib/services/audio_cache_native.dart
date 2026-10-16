@@ -30,7 +30,9 @@ class NativeAudioCache implements AudioCache {
           .send(http.Request('GET', episode.audioUri))
           .timeout(const Duration(seconds: 30));
       if (response.statusCode != 200) {
-        throw HttpException('Download returned ${response.statusCode}');
+        throw HttpException(
+          'De download gaf foutcode ${response.statusCode} terug',
+        );
       }
       var received = 0;
       await for (final chunk in response.stream.timeout(

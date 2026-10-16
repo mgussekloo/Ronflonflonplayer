@@ -110,7 +110,7 @@ class PosterHeader extends StatelessWidget {
           const SizedBox(width: 8),
           const Expanded(
             child: Text(
-              'THE RADIO ARCHIVE',
+              'De radio, de radio, wat is er op de radio?',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w900,
@@ -119,7 +119,7 @@ class PosterHeader extends StatelessWidget {
             ),
           ),
           IconButton(
-            tooltip: 'About this player',
+            tooltip: 'Over deze speler',
             onPressed: onAbout,
             icon: const Icon(Icons.info_outline),
           ),
@@ -171,7 +171,7 @@ class PosterHeader extends StatelessWidget {
       ),
       const SizedBox(height: 10),
       const Text(
-        'avec Jacques Plafond',
+        'met Jacques Plafond',
         style: TextStyle(
           fontFamily: 'Georgia',
           fontStyle: FontStyle.italic,
@@ -182,7 +182,7 @@ class PosterHeader extends StatelessWidget {
         ),
       ),
       const SizedBox(height: 14),
-      const Text('One episode at a time. A little radio time machine.'),
+      const Text('Alle uitzendingen van gisteren! Maar dan vandaag.'),
       const SizedBox(height: 22),
       const ExcludeSemantics(
         child: SizedBox(

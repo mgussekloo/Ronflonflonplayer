@@ -1,9 +1,10 @@
 {
-  "name": "Ronflonflon player",
+  "name": "Ronflonflon-speler",
+    "lang": "nl",
   "short_name": "Ronflonflon",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#a8cc43",
   "theme_color": "#a8cc43",
-  "description": "A dedicated player for the Ronflonflon radio archive."
+  "description": "Een speler voor alle uitzendingen van Ronflonflon."
 }

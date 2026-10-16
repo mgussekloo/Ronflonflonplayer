@@ -18,7 +18,7 @@ class PlayerController extends ChangeNotifier {
       state = ListeningState();
       _canSave = false;
       warning =
-          'Saved progress could not be read. Existing data will not be overwritten.';
+          'Je opgeslagen luisterpositie kan niet worden gelezen. Bestaande gegevens worden niet overschreven.';
     }
     _subscriptions.addAll([
       engine.positions.listen(_onPosition),
@@ -34,7 +34,9 @@ class PlayerController extends ChangeNotifier {
         unawaited(markFinished());
       }),
       engine.errors.listen((error) {
-        message = 'Playback failed. Try playing the episode again. $error';
+        debugPrint('Afspelen mislukt: $error');
+        message =
+            'Afspelen mislukt. Probeer de uitzending opnieuw af te spelen.';
         _notify();
       }),
     ]);
@@ -92,7 +94,7 @@ class PlayerController extends ChangeNotifier {
       await cache.removeCompleted(episodes, state.completed);
     } catch (_) {
       warning =
-          'Some finished audio could not be removed. Cleanup will be retried next time.';
+          'Sommige beluisterde opnamen kunnen niet worden verwijderd. Bij de volgende keer proberen we het opnieuw.';
       _notify();
     } finally {
       busy = false;
@@ -129,7 +131,7 @@ class PlayerController extends ChangeNotifier {
       Object error,
     ) {
       warning =
-          'Progress could not be saved. Browser storage may be full or disabled.';
+          'Je luisterpositie kan niet worden opgeslagen. De browseropslag is mogelijk vol of uitgeschakeld.';
       _notify();
     });
     return _writes;
@@ -178,8 +180,9 @@ class PlayerController extends ChangeNotifier {
       await save();
       _startPlayback();
     } catch (error) {
+      debugPrint('Uitzending laden mislukt: $error');
       message =
-          'Could not load this episode. Check your connection and available storage, then retry. $error';
+          'Deze uitzending kan niet worden geladen. Controleer je internetverbinding en beschikbare opslagruimte en probeer het opnieuw.';
       cache.release();
     } finally {
       busy = false;
@@ -191,8 +194,9 @@ class PlayerController extends ChangeNotifier {
     // just_audio's play Future lasts until pause/end; do not await it as a load.
     unawaited(
       engine.play().catchError((Object error) {
+        debugPrint('Afspelen geblokkeerd of mislukt: $error');
         message =
-            'Playback was blocked or failed. Press play to try again. $error';
+            'Afspelen is geblokkeerd of mislukt. Druk op de afspeelknop om het opnieuw te proberen.';
         _notify();
       }),
     );
@@ -205,7 +209,9 @@ class PlayerController extends ChangeNotifier {
         await engine.pause();
         await save();
       } catch (error) {
-        message = 'Could not pause playback. $error';
+        debugPrint('Pauzeren mislukt: $error');
+        message =
+            'Het afspelen kan niet worden gepauzeerd. Probeer het opnieuw.';
         _notify();
       }
     } else {
@@ -231,7 +237,9 @@ class PlayerController extends ChangeNotifier {
       await save();
       _notify();
     } catch (error) {
-      message = 'Could not seek. $error';
+      debugPrint('Naar een andere luisterpositie gaan mislukt: $error');
+      message =
+          'Je kunt nu niet naar een andere luisterpositie gaan. Probeer het opnieuw.';
       _notify();
     }
   }
@@ -252,7 +260,7 @@ class PlayerController extends ChangeNotifier {
       await cache.remove(episode);
     } catch (_) {
       warning =
-          'Episode marked finished, but audio cleanup failed. It will be retried next time.';
+          'De uitzending is gemarkeerd als beluisterd, maar de audio kan niet worden verwijderd. Bij de volgende keer proberen we het opnieuw.';
     } finally {
       playing = false;
       busy = false;

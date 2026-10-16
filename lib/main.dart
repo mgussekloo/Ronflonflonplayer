@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'player/audio_engine.dart';
 import 'player/player_controller.dart';
@@ -23,14 +24,18 @@ Future<void> main() async {
       ),
     );
   } catch (error) {
+    debugPrint('Lokale opslag openen mislukt: $error');
     runApp(
       MaterialApp(
+        locale: const Locale('nl'),
+        supportedLocales: const [Locale('nl')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
         home: Scaffold(
           body: Center(
             child: Padding(
               padding: const EdgeInsets.all(32),
               child: Text(
-                'Could not open local storage. Allow site storage and reload the page.\n$error',
+                'De lokale opslag kan niet worden geopend. Sta opslag voor deze website toe en laad de pagina opnieuw.',
               ),
             ),
           ),
@@ -51,7 +56,10 @@ class RonflonflonApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-    title: 'Ronflonflon player',
+    title: 'Ronflonflon-speler',
+    locale: const Locale('nl'),
+    supportedLocales: const [Locale('nl')],
+    localizationsDelegates: GlobalMaterialLocalizations.delegates,
     debugShowCheckedModeBanner: false,
     theme: PosterTheme.data,
     home: PlayerScreen(controller: controller, library: library),

@@ -237,7 +237,7 @@ void main() {
     store.fail = true;
     await player.playEpisode(first);
     expect(player.playing, isTrue);
-    expect(player.warning, contains('could not be saved'));
+    expect(player.warning, contains('kan niet worden opgeslagen'));
   });
 
   test('does not allow overlapping episode downloads', () async {
